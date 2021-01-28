@@ -8,27 +8,28 @@ const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
-const bar = document.querySelector('.theme-switch__toggle');
+const checkbox = document.querySelector('.theme-switch__toggle');
 const body = document.querySelector('body');
-let dakrMode = localStorage.getItem(Theme.DARK);
-bar.addEventListener("change", onLightDarkTheme);
+checkbox.addEventListener("change", switchTheme);
 
-const enableDarkMode = () => {
-  body.classList.add(Theme.DARK);
-  localStorage.setItem(Theme.DARK, 'changed');
-}
-const disableDarkMode = () => {
-  body.classList.remove(Theme.DARK);
-  localStorage.setItem(Theme.DARK, null);
-}
-if (dakrMode === 'changed') {
-  enableDarkMode(); 
-}
-function onLightDarkTheme() {
-  dakrMode = localStorage.getItem(Theme.DARK);
-  if (dakrMode !== "changed") {
-    enableDarkMode();
+function switchTheme() {
+  if (checkbox.checked) {
+    body.classList.add(Theme.DARK);
+    localStorage.setItem('dark-theme', Theme.DARK);
+    localStorage.removeItem(Theme.LIGHT);
   } else {
-    disableDarkMode();
+    body.classList.remove(Theme.DARK);
+    localStorage.setItem('light-theme', Theme.LIGHT);
+    localStorage.removeItem(Theme.DARK);
   }
 };
+let currentTheme = localStorage.getItem(Theme.DARK);
+if (currentTheme === Theme.DARK) {
+  body.classList.remove(Theme.LIGHT);
+  body.classList.add(Theme.DARK);
+  checkbox.checked = true;
+} else {
+  body.classList.remove(Theme.DARK);
+  body.classList.add(Theme.LIGHT);
+  checkbox.checked = false;
+}
